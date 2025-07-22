@@ -1,0 +1,31 @@
+path: scripts/labs/dexit/configs/task/AllegroHandGraspIHT.yaml #for debugging only
+defaults:
+  - AllegroHandHora
+
+name: AllegroHandGraspIHT
+
+env:
+  # Digitv1 specific
+  grasp_cache_name: allegro_digit_right
+  asset:
+    handAsset: "allegro/allegro_digit_right.urdf"    
+  reset_height_threshold: 0.45
+  
+  # Parameters in Haozhi launch commands
+  forceScale: 2
+  randomForceProbScalar: 0.25
+
+  hora:
+    point_cloud_sampled_dim: 100
+
+  # These are from the old AllegroHandHoraXY
+  reward:
+    pose_diff_penalty_scale: -0.1
+    undesired_rotation_penalty_scale: [-0.0,-0.1,1000000000,2000000000]
+    perp_angvel_clip_max: 10
+
+  privInfo:
+    enable_obj_orientation: True
+    enable_ft_pos: True
+    enable_obj_angvel: True
+    enable_obj_end_point: True

@@ -1,0 +1,52 @@
+path: gum/labs/dexit/configs/task/AllegroHandHoraIHT.yaml
+name: AllegroHandHoraIHT
+defaults:
+  - AllegroHandHora
+collect_sim_data:
+  save_data: False
+  save_data_dir: "./sim_reskin_5-28"
+  
+env:
+  numObservations: 99 #96: joint angles only #99: with object goal position
+  enable_palm_reskin: False
+  enable_palm_binary: False
+  randomization:
+    randomize_hand_scale: False 
+    obs_noise_e_scale: 0
+    randomizeMass: True
+    randomizeMassLower: 0.2
+    randomizeMassUpper: 0.45
+    randomizeCOM: True
+    randomizeCOMLower: -0.01
+    randomizeCOMUpper: 0.01
+    randomizeFriction: True
+    randomizeFrictionLower: 0.3
+    randomizeFrictionUpper: 3.0
+    randomizeScale: True
+    # if scale_list_init is True, randomizeScaleLower and randomizeScaleUpper is not useful
+    scaleListInit: True
+    randomizeScaleList: [0.7, 0.72, 0.74, 0.76, 0.78, 0.8, 0.82, 0.86, 0.9, 0.92, 0.94, 0.96, 0.98, 1, 1.02, 1.04, 1.06, 1.08, 1.1, 1.12, 1.14, 1.16, 1.18, 1.2]
+    randomizeScaleLower: 0.75  # only useful when not scaleListInit
+    randomizeScaleUpper: 1  # only useful when not scaleListInit
+    randomizePDGains: True
+    randomizePGainLower: 2.9
+    randomizePGainUpper: 3.1
+    randomizeDGainLower: 0.09
+    randomizeDGainUpper: 0.11
+    obs_noise_t_scale: 0.005
+    action_noise_e_scale: 0.01
+    action_noise_t_scale: 0.005
+    # stage 2 specific:
+    # biases are sampled at the beginning of episode and kept fixed
+    # from an uniform distribution between (-config_value, config value)
+    # then the noise is sampled from Normal(bias, scale)
+    noisy_obj_rpy_bias: 0.1
+    noisy_obj_pos_bias: 0.02
+    noisy_obj_rpy_scale: 0.01
+    noisy_obj_pos_scale: 0.005
+  asset:
+    handAsset: "assets/allegro/meta_hand_right_digit.urdf"
+    fingertip: digitv1
+  object:
+    subtype: "rolling_pin"
+  

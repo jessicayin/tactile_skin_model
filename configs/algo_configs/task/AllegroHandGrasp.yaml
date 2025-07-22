@@ -1,0 +1,4 @@
+path: gum/labs/dexit/configs/task/AllegroHandGrasp.yaml
+name: AllegroHandGrasp
+defaults:
+  - AllegroHandHora

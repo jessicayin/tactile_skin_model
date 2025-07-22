@@ -1,0 +1,31 @@
+# @package _global_
+defaults:
+  - stage2_proprio_only
+
+pipeline: cpu
+
+task:
+  env:
+    numEnvs: 2000
+    enable_fine_contact: True 
+    hora:
+      render_slowness: 5
+      perceived_point_cloud_sampled_dim: 100
+      sim_point_cloud_registration_ratio: 0.1
+      sim_point_cloud_registration: True
+    rgbd_camera:
+      enable: True
+      seg_as_depth: False
+      seg_dropout_ratio: 0.2
+      seg_disturbance_ratio: 0.02
+      seg_failure_ratio: 0.05
+      randomize_fov: True
+      randomize_pos: True
+      randomize_vtar: True
+      ignore_finger_depth: True  
+
+train:
+  padapt:
+    contact_distillation: True
+    cache_suffix: stage2_tns_transformer
+    use_perceived_point_cloud: True

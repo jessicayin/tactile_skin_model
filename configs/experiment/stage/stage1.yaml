@@ -1,0 +1,18 @@
+# @package _global_
+task:
+  env:
+    enable_palm_reskin: False
+    enable_palm_binary: False
+    enable_fine_contact: False
+train:
+  algo: PPO
+  ppo:
+    multi_gpu: False
+    priv_info: True
+    proprio_adapt: False
+    output_name: "${task.name}/${task.env.grasp_cache_name}/${pretty_axis: ${task.env.rotation_axis}}"
+
+    # These come from the old AllegroHandHoraXY train overrides
+    max_agent_steps: 4000000000
+    save_best_after: 0
+    save_frequency: 500

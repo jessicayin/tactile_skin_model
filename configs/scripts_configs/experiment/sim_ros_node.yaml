@@ -1,0 +1,38 @@
+# @package _global_
+defaults:
+  - eval
+
+task:  
+  env:
+    episodeLength: 100000
+    numEnvs: 1
+    camera_style: hora-tactile
+    camera_name: front-left
+
+    intrinsics:
+      w: 1280
+      h: 720
+      yfov: 54.5 # realsense D435 (fov_width: 54.50994760831439, fov_height: 42.23043070519842)
+
+    noisy_depth_capture: true
+
+    randomization:
+      # largest default size for realshape/combinev2
+      randomizeScaleList: [0.68]
+simnode_output_dir: "outputs/simnode"
+
+# stop_time, warmup_time and publish_rate_hz use the simulator's clock
+stop_time: 30.0 # how many seconds of data to collect (not counting warmpup)
+publish_rate_hz: 30.0 # data streaming rate
+step_delay: 1.0 # sleeps the environment for this amount of seconds after every step
+
+# stops the env if publish this many times in a row w/o receiving subscriptions
+publish_lock_threshold: 100
+
+save_rosbag: false
+
+# maps topic names to a tuple with (observation name, processing function)
+# the function assumes that the message data has been converted to a numpy array
+# and receives an input a dictionary {topic_names: np arrays}
+topic_obs_map:
+  /obj_point_cloud: [perceived_point_cloud_info, "${import: gum.labs.m05_system.ros.allegro_sim_node.point_cloud_obs_from_topics_dict}"]

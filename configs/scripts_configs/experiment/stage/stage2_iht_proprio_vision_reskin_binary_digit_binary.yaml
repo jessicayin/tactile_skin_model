@@ -1,0 +1,61 @@
+# @package _global_
+defaults:
+  - stage2_proprio_only
+
+pipeline: cpu
+
+task:
+  env:
+    numEnvs: 1024
+    numObservations: 99
+
+    enable_fine_contact: True 
+    enable_palm_binary: True
+    enable_palm_reskin: False
+    camera_style: default
+    intrinsics:
+      w: 620
+      h: 620
+      yfov: 42.28834761225316
+    camera_name: top-down
+    
+  enableCameraSensors: True
+    
+  hora:
+    render_slowness: 5
+    sim_point_cloud_registration: False
+    sim_point_cloud_registration_ratio: 0.0
+    
+  rgbd_camera:
+    fast_sim:
+      enable: True
+      fast_sim: True
+    enable: True
+    seg_as_depth: True
+    seg_dropout_ratio: 0.2
+    seg_disturbance_ratio: 0.02
+    seg_failure_ratio: 0.05
+    randomize_fov: True
+    # randomize_pos: True
+    randomize_camera_pos: False
+    # randomize_vtar: True
+    randomize_vtar: False
+    ignore_finger_depth: True
+
+  ppo:
+    proprio_adapt: True
+    priv_info: True
+    use_perceived_point_cloud_info: False
+    use_gt_point_cloud_info: False
+ 
+train:
+  algo: ProprioAdapt
+  padapt:
+    action_imitation: True
+    visual_distillation: True
+    contact_distillation: True
+    cache_suffix: stage2_vt_transformer
+    use_perceived_point_cloud: False
+    use_temporal_transformer: True
+    use_position_encoder: True
+

@@ -1,0 +1,39 @@
+# @package _global_
+defaults:
+  - stage1
+
+# This will read the stage1 policy from the same dir defined by 
+# stage1. This is also the save dir for stage 2.
+checkpoint: "${outputs_root_dir}/${train.ppo.output_name}/stage1_nn/best*.pth"
+
+task:
+  env:
+    numObservations: 99 #96: joint angles only, 99: with object goal position
+    numEnvs: 1000
+    enable_palm_reskin: False
+    enable_palm_binary: True
+    hora:
+      point_cloud_sampled_dim: 0
+    enableCameraSensors: True
+    rgbd_camera:
+      fast_sim:
+        enable: False
+        fast_sim: False
+      enable: False
+train:
+  algo: ProprioAdapt
+  
+  ppo:
+    proprio_adapt: True
+    priv_info: True
+    use_perceived_point_cloud_info: False
+    use_gt_point_cloud_info: False
+
+  padapt:
+    action_imitation: True
+    cache_suffix: stage2_proprio_transformer
+
+    iter_per_step: 8
+    use_temporal_transformer: True #ActorCritic class in models.py, for prorioception, change shape of input & output layer
+    use_position_encoder: True #ActorCritic class in models.py
+

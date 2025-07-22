@@ -1,0 +1,28 @@
+# @package _global_
+defaults:
+  - default
+
+checkpoint: null # Require the checkpoint to be passed manually
+pipeline: cpu
+
+task:
+  on_evaluation: true
+  eval_results_dir: ${outputs_root_dir}/eval/
+  log_full_contact_tensor: false
+  
+  env:
+    episodeLength: 400
+    numEnvs: 1000
+    enable_fine_contact: true
+    # set unreachable so episode continues with object on the floor
+    # we compute metrics/rewards offline afterwards
+    reset_height_threshold: -100.0
+
+train:
+  ppo:
+    multi_gpu: false
+
+test: true
+visualize: false
+randomize_eval: true
+eval_all_objects: false

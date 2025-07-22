@@ -1,0 +1,78 @@
+path: scripts/labs/dexit/configs/task/AllegroHandHoraIHT.yaml #for debugging only
+defaults:
+  - AllegroHandHora
+
+name: AllegroHandHoraIHT
+experiment_name: 'experiment_1'
+use_wandb: True
+env:
+  # Digitv1 specific
+  grasp_cache_name: "initial_grasps/meta_hand_right"
+  asset:
+    handAsset: "allegro/meta_hand_right_digit.urdf"
+    # handAsset: "allegro/allegro_digit_right.urdf"    
+    fingertip: "digitv1"
+  reset_height_threshold: 0.45
+  genGraspCategory: cylinder
+  # Parameters in Haozhi launch commands
+  forceScale: 2
+  randomForceProbScalar: 0.25
+  enable_fine_contact: False
+  enable_palm_reskin: False
+  enable_palm_binary: False
+  translation_direction: positive #positive or negative
+  numObservations: 99 #96: joint angles only #99: with object goal position
+
+  enableCameraSensors: False
+ 
+  hora:
+    point_cloud_sampled_dim: 100
+
+  reward:
+    angvelClipMin: -0.5
+    angvelClipMax: 0.5
+    # reward scale: [init scale, final scale, curriculum start, curriculum end]
+    # single scalar means no curriculum
+    rotate_reward_scale: 100
+    obj_linvel_penalty_scale: 10 # -0.3
+    pose_diff_penalty_scale: -0.3
+    torque_penalty_scale: -0.1
+    dof_vel_penalty_scale: 0.0
+    dof_acc_penalty_scale: 0.0
+    work_penalty_scale: -2.0
+    # undesired rotation
+    perp_angvel_clip_min: -0.1
+    perp_angvel_clip_max: 0.1 #10, from allegrohandhoraXY
+    undesired_rotation_penalty_scale: 0.0  #[-0.0,-0.1,1000000000,2000000000]
+    # penalize the object touching the base of fingertips
+    # because of lower coefficient of friction and no compliance
+    finger_base_penalty_scale: 0.0
+    pencil_z_dist_penalty_scale: 1000
+    # canonical position
+    position_penalty_scale: 170
+    finger_obj_penalty_scale: 0.0
+    contact_force_reward_scale: 0.0
+    action_penalty_scale: 0.0
+
+  privInfo:
+    enable_obj_orientation: True
+    enable_ft_pos: True
+    enable_obj_angvel: True
+    enable_obj_end1: True 
+    enable_obj_end2: True
+    contact_form: 'gpu_contact'
+    contact_input: 'fingertip_dof'
+    enableNetContactF: True 
+
+
+  object:
+    type: cylinder
+      subtype: cylinder
+  
+  randomization:
+    randomizeScaleList: [0.7, 0.72, 0.74, 0.76, 0.78, 0.8, 0.82, 0.86, 0.9, 0.92, 0.94, 0.96, 0.98, 1, 1.02, 1.04, 1.06, 1.08, 1.1, 1.12, 1.14, 1.16, 1.18, 1.2]
+
+sim:
+  use_gpu_pipeline: True # this is the problem
+  physx: 
+    use_gpu: True

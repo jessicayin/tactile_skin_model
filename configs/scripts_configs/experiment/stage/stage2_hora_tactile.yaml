@@ -1,0 +1,16 @@
+# @package _global_
+task:
+  env:
+    numEnvs: 10000
+train:
+  algo: ProprioAdapt
+  ppo:
+    multi_gpu: False
+    priv_info: True
+    proprio_adapt: True
+    max_agent_steps: 2000000000
+    save_best_after: 0
+ 
+  padapt:
+    action_imitation: True
+    cache_suffix: stage2_hora_tactile

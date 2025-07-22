@@ -1,0 +1,37 @@
+# @package _global_
+defaults:
+  - dataset: default
+  - override /task: AllegroHandHoraDigitv1
+  - override /train: AllegroHandHora
+
+env_cls: AllegroHandGrasp
+headless: True
+pipeline: cpu
+test: True
+
+task:
+  env:
+    genGrasps: True
+    numEnvs: 20000
+    episodeLength: 40
+
+    forceScale: 0
+    randomForceProbScalar: 0
+
+    controller:
+      controlFrequencyInv: 8
+      torque_control: False
+
+    randomization:
+      randomizeMass: True
+      randomizeMassLower: 0.05
+      randomizeMassUpper: 0.051
+      randomizeCOM: False
+      randomizeFriction: False
+      randomizePDGains: False
+      randomizeScale: False
+
+train:
+  ppo:
+    priv_info: True
+

@@ -1,0 +1,41 @@
+# @package _global_
+defaults:
+  - default
+
+# This will read the stage1 policy from the same dir defined by 
+# experiments/stage@stage=stage1.
+checkpoint: "${outputs_root_dir}/${train.ppo.output_name}/stage1_nn/best*.pth"
+
+task:
+  on_evaluation: True
+  
+  env:
+    episodeLength: 100000
+    numEnvs: 1
+    camera_style: hora-tactile
+    camera_name: front-left
+
+    intrinsics:
+      w: 1280
+      h: 720
+      yfov: 54.5 # realsense D435 (fov_width: 54.50994760831439, fov_height: 42.23043070519842)
+
+    noisy_depth_capture: True
+
+    randomization:
+      # median of the ones used in AllegroHandHora_digitv1_stage1
+      randomizeScaleList: [0.62]
+
+train:
+  ppo:
+    multi_gpu: False
+
+data_collect_dir: "outputs/data_stream"
+
+test: True
+stop_time: 30 # how many simulation seconds of data to collect
+initial_wait_time: 5 # how many seconds to wait before starting to collect data
+
+# controls the capture data frequency
+# 4e-2 gives roughly 30Hz in devfair machines
+capture_wait_time: 4e-2 

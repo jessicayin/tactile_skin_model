@@ -1,0 +1,246 @@
+name: AllegroHandHora
+physics_engine: ${..physics_engine}
+on_evaluation: False
+eval_results_dir: ${outputs_root_dir}/eval/results
+log_metrics: True # only used if in on_evaluation=True
+
+env:
+  # environment basic
+  numEnvs: ${resolve_default:4096,${...num_envs}} #8192
+  numObservations: 99
+  numActions: 16
+  envSpacing: 0.5
+
+  episodeLength: 400
+  enableDebugVis: False
+  camera_look_at_env: null
+  aggregateMode: 1
+  controller:
+    torque_control: True
+    controlFrequencyInv: 10  # 20Hz
+    pgain: 3
+    dgain: 0.1
+    action_scale: 0.04167
+    torque_limit: 0.7
+
+  # multi-axis rotation learning
+  multi_axis: False
+  multi_axis_resample_prob: 0.01
+
+  handOrientation: 'up'
+  rotation_axis: '-z'
+  genGrasps: False
+  genGraspCategory: cylinder
+
+  clipObservations: 5.0
+  clipActions: 1.0
+  reset_height_threshold: 0.645
+  grasp_cache_name: "initial_grasps/meta_hand_right"
+
+  # Random forces applied to the object
+  forceScale: 0.0
+  randomForceProbScalar: 0.0
+  forceDecay: 0.9
+  forceDecayInterval: 0.08
+  use_float_init: False
+  disable_gravity_at_beginning: False
+  enable_fine_contact: False
+
+  hora:
+    propHistoryLen: 30
+    privInfoDim: 9
+    critic_obs_dim: 100
+    render_slowness: 1
+
+  reward:
+    angvelClipMin: -0.5
+    angvelClipMax: 0.5
+    rotateRewardScale: 700
+    objLinvelPenaltyScale: 10 #task completion reward
+    poseDiffPenaltyScale: -0.3
+    torquePenaltyScale: -0.1
+    workPenaltyScale: -2.0
+    # reward scale: [init scale, final scale, curriculum start, curriculum end]
+    # single scalar means no curriculum
+    rotate_reward_scale: 1.0 #double check which convention for reward terms is correct
+    obj_linvel_penalty_scale: -0.3
+    pose_diff_penalty_scale: -0.3
+    torque_penalty_scale: -0.1
+    dof_vel_penalty_scale: 0.0
+    dof_acc_penalty_scale: 0.0
+    work_penalty_scale: -2.0
+    # undesired rotation
+    perp_angvel_clip_min: -0.1
+    perp_angvel_clip_max: 0.1
+    undesired_rotation_penalty_scale: 0.0
+    # penalize the object touching the base of fingertips
+    # because of lower coefficient of friction and no compliance
+    finger_base_penalty_scale: 0.0
+    pencil_z_dist_penalty_scale: 1000
+    # canonical position
+    position_penalty_scale: 500
+    finger_obj_penalty_scale: 0.0
+    contact_force_reward_scale: 500 #balance_finger_forces reward
+    action_penalty_scale: 0.0
+    fast_rotation_penalty_scale: 0.0
+
+  
+  # object pose mods
+  object_pose:
+    to_hand_frame: true # false for world frame 
+    base_slowness: 2  # pose is kept fixed (at least) for this many steps
+    drop_rate: 0.01 # small probability of failing to update pose until next slow cycle
+  
+  
+  # point cloud config
+  point_cloud_sampled_dim: 0 # gt used in stage 1
+  fingertip_point_cloud_sampled_dim: 0
+  perceived_point_cloud_sampled_dim: 0 # from perception for stage 2
+  sim_point_cloud_registration: false
+  object_centric_point_cloud: false # toggles object-centric vs world frames
+  # if not null, this must be a tuple representing (pos noise scale, rot noise scale)
+  # adds gaussian errors around gt object pose when `object_centric_point_cloud=false`
+  pose_noise_point_cloud: null
+  pose_bias_point_cloud: null
+
+  baseObjScale: 0.8
+  randomization:
+    # Randomization Property
+    randomizeMass: True
+    randomizeMassLower: 0.1
+    randomizeMassUpper: 0.35
+    randomizeCOM: True
+    randomizeCOMLower: -0.01
+    randomizeCOMUpper: 0.01
+    randomizeFriction: True
+    randomizeFrictionLower: 0.3
+    randomizeFrictionUpper: 3.0
+    randomizeScale: True
+    randomize_hand_scale: False
+    # if scale_list_init is True, randomizeScaleLower and randomizeScaleUpper is not useful
+    scaleListInit: True
+    randomizeScaleList: [0.7, 0.72, 0.74, 0.76, 0.78, 0.8, 0.82, 0.86, 0.9, 0.92, 0.94, 0.96, 0.98, 1, 1.02, 1.04, 1.06, 1.08, 1.1, 1.12, 1.14, 1.16, 1.18, 1.2]
+    randomizeScaleLower: 0.75  # only useful when not scaleListInit
+    randomizeScaleUpper: 1  # only useful when not scaleListInit
+    randomizePDGains: True
+    randomizePGainLower: 2.9
+    randomizePGainUpper: 3.1
+    randomizeDGainLower: 0.09
+    randomizeDGainUpper: 0.11
+    jointNoiseScale: 0.01
+    obs_noise_e_scale: 0.01
+    obs_noise_t_scale: 0.005
+    action_noise_e_scale: 0.01
+    action_noise_t_scale: 0.005
+    # stage 2 specific:
+    # biases are sampled at the beginning of episode and kept fixed
+    # from an uniform distribution between (-config_value, config value)
+    # then the noise is sampled from Normal(bias, scale)
+    noisy_obj_rpy_bias: 0.1
+    noisy_obj_pos_bias: 0.02
+    noisy_obj_rpy_scale: 0.01
+    noisy_obj_pos_scale: 0.005
+
+
+  privInfo:
+    enableObjPos: True
+    enableObjScale: True
+    enableObjMass: True
+    enableObjCOM: True
+    enableObjFriction: True
+    enable_obj_restitution: True
+    enableNetContactF: True
+    contact_input_dim: 4
+    contact_form: 'gpu_contact'
+    contact_input: 'fingertip_dof'
+    contact_binarize_threshold: 0.1
+    enable_obj_orientation: True
+    enable_obj_linvel: False
+    enable_obj_angvel: True
+    enable_ft_pos: True
+    enable_ft_orientation: False
+    enable_ft_linvel: False
+    enable_ft_angvel: False
+    enable_hand_scale: False
+
+  curriculum:
+    gravity:
+      enable: False
+      start: 0.0
+      end: -9.81
+      increase_start: 300
+      increase_interval: 100 # in million, agent steps
+      increase_amount: -1.0
+
+  object:
+    type: 'cylinder' 
+    sampleProb: [1.0]
+    subtype: 'cylinder' # set to a string object name to evaluate on only one object
+
+
+  asset:
+    handAsset: 'assets/allegro/allegro_internal.urdf'
+
+  # set to True if you use camera sensors in the environment
+  enableCameraSensors: False
+  rgbd_camera:
+    enable: False
+    fast_sim:
+      enable: True
+      fast_sim: True
+      num_dense_points_object: 2000
+      num_dense_points_finger: 1500
+      depth_resolution: 500
+      object_lower_clip: -0.38
+      object_upper_clip: -0.28
+      finger_lower_clip: -0.48
+      finger_upper_clip: -0.28
+    camera_width: 80
+    camera_height: 60
+    buffer_width: 40
+    buffer_height: 40
+    seg_as_depth: False
+    ignore_finger_depth: False
+    seg_dropout_ratio: 0.0  # 0.2
+    seg_disturbance_ratio: 0.0  # 0.02
+    seg_failure_ratio: 0.0  # 0.05
+    # camera position randomization for robustness
+    randomize_fov: True
+    randomize_fov_low: 65
+    randomize_fov_high: 75
+    randomize_pos: True
+    randomize_pos_low: [0.095, 0.253, 0.685]
+    randomize_pos_high: [0.135, 0.293, 0.725]
+    randomize_vtar: True
+    randomize_vtar_low: [-0.02, -0.02, 0.56]
+    randomize_vtar_high: [0.02, 0.02, 0.60]
+    depth_noise_t_scale: 0.01
+    depth_noise_e_scale: 0.02
+
+  fine_contact:
+    miss_ratio: 0.0
+    fp_ratio: 0.0  # false positive
+    flip_ratio: 0.0
+
+
+sim:
+  dt: 0.005 # 200 Hz
+  substeps: 1
+  up_axis: 'z'
+  use_gpu_pipeline: ${eq:${...pipeline},'gpu'}
+  gravity: [0.0, 0.0, -9.81]
+  physx:
+    num_threads: ${....num_threads}
+    solver_type: ${....solver_type}
+    use_gpu: ${contains:'cuda',${....sim_device}} # set to False to run on CPU
+    num_position_iterations: 8
+    num_velocity_iterations: 0
+    # max_gpu_contact_pairs: 8388608 # 8*1024*1024
+    max_gpu_contact_pairs: 1024
+    num_subscenes: ${....num_subscenes}
+    contact_offset: 0.002
+    rest_offset: 0.0
+    bounce_threshold_velocity: 0.2
+    max_depenetration_velocity: 1.0
+    default_buffer_size_multiplier: 5.0
+    contact_collection: 1 # 0: CC_NEVER (don't collect contact info), 1: CC_LAST_SUBSTEP (collect only contacts on last substep), 2: CC_ALL_SUBSTEPS (default - all contacts)

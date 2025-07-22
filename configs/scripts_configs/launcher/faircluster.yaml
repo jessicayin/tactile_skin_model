@@ -1,0 +1,23 @@
+# @package _global_
+defaults:
+  - override /hydra/launcher: submitit_slurm
+  - _self_
+
+hydra_dir: "${outputs_root_dir}/${train.ppo.output_name}/${now:%Y.%m.%d}/${now:%H.%M.%S}"
+
+hydra:
+  job:
+    chdir: False
+  launcher:    
+    cpus_per_task: 40
+    partition: learnaccel
+    timeout_min: 2880
+    gpus_per_node: 4
+    tasks_per_node: 1
+    constraint: volta32gb
+    nodes: 1
+    mem_gb: 128
+    submitit_folder: "${hydra_dir}/submitit"
+
+  sweep: 
+    dir: "${hydra_dir}"

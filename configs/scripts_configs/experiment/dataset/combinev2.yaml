@@ -1,0 +1,12 @@
+# @package _global_
+task:
+  env:
+    genGraspCategory: realshape
+
+    object:
+      type: realshape/combinev2
+      subtype: null # set to a string object name to evaluate on only one object
+      sampleProb: [1.0] # one entry for object.type element
+
+    randomization:
+      randomizeScaleList: [0.56,0.58,0.60,0.62,0.64,0.66,0.68]

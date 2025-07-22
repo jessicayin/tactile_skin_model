@@ -1,0 +1,3 @@
+path: gum/labs/dexit/configs/train/AllegroHandGrasp.yaml
+defaults:
+  - AllegroHandHora

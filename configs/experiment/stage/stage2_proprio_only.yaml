@@ -1,0 +1,39 @@
+# @package _global_
+defaults:
+  - stage1
+
+# This will read the stage1 policy from the same dir defined by 
+# stage1. This is also the save dir for stage 2.
+checkpoint: "${outputs_root_dir}/${train.ppo.output_name}/stage1_nn/best*.pth"
+task:
+  env:
+    numEnvs: 1000
+    numObservations: 99 #96: joint angles only, 99: with object goal position
+    enable_palm_reskin: False
+    enable_palm_binary: False
+    hora:
+      point_cloud_sampled_dim: 0
+    enableCameraSensors: True
+  
+  rgbd_camera:
+    fast_sim: 
+      enable: False
+      fast_sim: False
+    enable: False
+
+train:
+  algo: ProprioAdapt
+  
+  ppo:
+    proprio_adapt: True
+
+  padapt:
+    action_imitation: True
+    cache_suffix: stage2_proprio_transformer
+    visual_distallation: False
+    contact_distallation: False
+    use_perceived_point_cloud: False
+    iter_per_step: 8
+    use_temporal_transformer: True
+    use_position_encoder: True
+

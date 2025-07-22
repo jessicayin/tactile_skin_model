@@ -1,0 +1,9 @@
+# @package _global_
+defaults:
+  - dataset: default
+  - stage: default
+  - override /task: AllegroHandHora 
+  - override /train: AllegroHandHora
+
+seed: 0
+headless: True

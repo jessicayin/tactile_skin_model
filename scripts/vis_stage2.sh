@@ -1,0 +1,1 @@
+python scripts/labs/dexit/train.py task=AllegroHandHoraIHT launcher=basic headless=False ++task.env.enableDebugVis=True task.env.numEnvs=1 test=True experiment/stage@stage=stage2_proprio_reskin task.env.object.type=cylinder checkpoint="./models/tactile_policy_u3-axis.ckpt" task.env.translation_direction="positive"

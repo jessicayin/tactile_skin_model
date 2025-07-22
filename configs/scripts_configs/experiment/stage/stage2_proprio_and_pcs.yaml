@@ -1,0 +1,17 @@
+# @package _global_
+defaults:
+  - stage2_proprio_only
+
+task:
+  env:
+    object:
+      subtype: contactdb_rubber_duck
+  
+    hora:
+      perceived_point_cloud_sampled_dim: 100
+      sim_point_cloud_registration: False
+  
+train:
+  padapt:
+    cache_suffix: stage2_proprio_and_pcs
+    use_perceived_point_cloud: True

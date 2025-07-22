@@ -1,0 +1,12 @@
+# @package _global_
+task:
+  env:
+    genGraspCategory: dextouch
+
+    object:
+      type: realshape/dextouch
+      subtype: null # set to a string object name to evaluate on only one object
+      sampleProb: [1.0] # one entry for object.type element
+
+    randomization:
+      randomizeScaleList: [0.55,0.60,0.65,0.70,0.75,0.80,0.85,0.90,0.95,1.0,1.05,1.10]
