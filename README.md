@@ -13,7 +13,7 @@ This is the code release of the following paper:<br>
 ## Overview
 
 This repository contains the following functionalities:
-1. We offer a standalone implementation for the tactile skin model implementation, for use in your own pipeline.
+1. We offer a standalone implementation for the tactile skin model implementation (`reskin_model.py`), for use in your own pipeline.
 2. We provide the pretrained in-hand translation policy in simulation with IsaacGym Preview 4.0 ([Download](https://drive.google.com/file/d/1StaRl_hzYFYbJegQcyT7-yjgutc6C7F9)). Model weights can be downloaded [here](https://drive.google.com/drive/folders/1BMPx382AQrugZmAXYDswY-Dge9GrpZa0?usp=sharing).
 
 Please refer to the [Hora](https://github.com/haozhiqi/hora) repo for the RL training pipeline implementation, we primarily show the tactile skin model and how it is integrated here. Additionally, please refer to the Hora repo for policy deployment code.
